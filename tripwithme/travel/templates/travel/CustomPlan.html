@@ -1,0 +1,195 @@
+{% extends 'travel/base.html' %}
+{%block content%}
+<div class="contain">
+    <br>
+    <section class="tour-planner teal">
+        <div class="row">
+            <div class="plan col s5">
+                <h5 class="white-text bold">Smart Travel Planner</h5>
+                <h6 class="white-text sec-heading" style="margin-left: 7%;margin-right: 7%;">My Interests</h6>
+                <div class="interests row" style="margin-left: 7%;margin-right: 7%;">
+                    <div class="col s2">
+                        <div class="interest-card center card-selected"><i class="material-icons small white-text">terrain</i></div>
+                    </div>
+                    <div class="col s2">
+                        <div class="interest-card center"><i class="material-icons small white-text">beach_access</i></div>
+                    </div>
+                    <div class="col s2">
+                        <div class="interest-card center"><i class="material-icons small white-text">account_balance</i></div>
+                    </div>
+                </div>
+
+                <h6 class="white-text sec-heading" style="margin-left: 7%;margin-right: 7%;">Locations</h6>
+                <div class="row locations white-text" style="margin-left: 7%;margin-right: 7%;">
+                    <span>Start</span>
+                    
+                    <div class="row">
+                            <div class="input-field">
+                                <input class="styled-input white" type="text" id="start">
+                            </div>
+                        </div>
+                    <div style="margin-top:5px;">Destinations</div>
+                    <div class="row">
+                        <div class="input-field">
+                            <input class="styled-input white" type="text" style="width:90%!important;" id="autocomplete-input">
+                        </div>
+                    </div>
+                    <div class="wish-btn">Wishlist</div>
+                </div>
+                <div class="row" id="destination-list" style="margin-left: 7%;margin-right: 7%;">
+
+                </div>
+
+                <h6 class="white-text sec-heading" style="margin-left: 7%;margin-right: 7%;">Travel</h6>
+                <div class="row locations white-text" style="margin-left: 7%;margin-right: 7%;">
+                    <div class="row">
+                        <div class="input-field col s5">
+                            <i class="material-icons prefix">schedule</i>
+                            <input id="icon_prefix" type="text" class="validate styled-input white">
+                            <label for="icon_prefix">Duration</label>
+                        </div>
+                        <div class="col s1"></div>
+                        <div class="input-field col s4">
+                            <i class="material-icons prefix">group_add</i>
+                            <input id="icon_telephone" type="text" class="validate styled-input white">
+                            <label for="icon_telephone">People</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 7%;margin-right: 7%;">
+                    <span class="col s2 white-text">Travel Mode</span>
+                    <div class="col s2">
+                        <div class="interest-card center card-selected"><i class="material-icons small white-text">business_center</i></div>
+                    </div>
+
+                    <div class="col s2">
+                        <div class="interest-card center"><i class="material-icons small white-text">directions_transit</i></div>
+                    </div>
+
+                    <div class="col s2">
+                        <div class="interest-card center"><i class="material-icons small white-text">airport_shuttle</i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="plan-map col s7 white center">
+                <span class="col s2 teal-text">Suggested Places</span>
+                <div class="row suggested-places">
+                    <div class="col s12 m3">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="/static/media/ella.jpg">
+                                <span class="card-title">Ella</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col s12 m3">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="/static/media/Sigiriya.jpg">
+                                <span class="card-title">Sigiriya</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col s12 m3">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="/static/media/yala.jpg">
+                                <span class="card-title">Yala</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <img src="/static/media/planner-map.svg" alt="" id="map">
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section class="">
+
+    </section>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#autocomplete-input').autocomplete({
+            data: {
+                "Kandy": null,
+                "Colombo": null,
+                "Badulla": null
+            },
+        });
+    });
+
+    var des_input = document.getElementById("autocomplete-input");
+
+    var destinations="";
+
+    var des_list=document.getElementById("destination-list");
+    var start=document.getElementById("start");
+
+    function updateDestinations(){
+        var list=destinations.split("-");
+        
+        var el="";
+        var map_name="";
+        console.log(list.length);
+
+        if(start.value){
+            map_name=start.value+"-";
+        }
+
+        for(i=0;i<list.length;i++){
+            
+            if(list[i]!=""){
+                el+='<span style="background-color: white;color: black;padding:5px;border-radius:4px;margin-right:4px;">'+list[i]+"</span>";
+                if(i!=0){
+                    map_name+="-";
+                }
+                map_name+=list[i];
+            }
+        }
+        des_list.innerHTML=el;
+        console.log(el);
+        document.getElementById("map").src = "/static/media/"+map_name+".png";
+    }
+
+    des_input.addEventListener("keyup", function(event) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13 && des_input.value) {
+          // Trigger the button element with a click
+          if(destinations.includes(des_input.value)){
+              console.log(destinations);
+              des_input.value=""
+          }else{
+            destinations+=des_input.value+"-";
+            console.log(destinations);
+            des_input.value=""
+            updateDestinations();
+          }
+          
+        }
+      });
+
+
+      start.addEventListener("keyup", function(event) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            updateDestinations();
+          
+          
+        }
+      });
+</script>
+{%endblock%}
